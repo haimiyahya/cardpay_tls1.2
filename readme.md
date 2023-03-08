@@ -92,14 +92,126 @@ To make sure the TLS 1.2 is configured correctly for the PayNet simulator. Its b
 
 So I duplicate the existing Paynet Server simulator to listen to another port 17503.
 
+STunnel configuration as below:
+
+```text
+[paynet]
+accept  = 17504
+connect = 17503
+cert = C:\Users\haimi.yahya\Documents\work_repos\cardpay_tls1.2\Certificates\zombieserver.crt
+key = C:\Users\haimi.yahya\Documents\work_repos\cardpay_tls1.2\Certificates\zombieserver.key
+CAfile = C:\Users\haimi.yahya\Documents\work_repos\cardpay_tls1.2\Certificates\Zombie_Spotters_Ltd.crt
+```
+
+
+
 ## Test Connecting using Socat to TLS STunnel which connecting to Paynet Simulator
 
 The configuration as diagram below:
 
 ```mermaid
 flowchart LR
-    A[socat] --conn-->B[CPay_Sim]
-    A --conn--> C[STunnel] --conn--> D[Paynet_sim]
+    A[socat] --conn-->B[CPay_Sim 17501]
+    A --conn--> C[STunnel 17504] --conn--> D[Paynet_sim 17503]
     
+```
+
+Run the cardpay and Paynet simulator, run stunnel, then run socat
+
+```cmd
+socat TCP4:localhost:17501 SSL:zombieserver:17504,reuseaddr,cert=zombieclient.crt,cafile=Zombie_Spotters_Ltd.crt,key=zombieclient.key
+```
+
+cardpay simulator and paynet simulator are able to communicate:
+
+```
+Interactive Elixir (1.14.1) - press Ctrl+C to exit (type h() ENTER for help)
+iex(1)> "client connected"
+iex(1)> :cpay_listener
+iex(1)> "client connected"
+iex(1)> "paynet server received:"
+iex(1)> "0200ping1"
+iex(1)> "cpay server received:"
+iex(1)> "0210ping1"
+iex(1)> "paynet server received:"
+iex(1)> "0200ping2"
+iex(1)> "cpay server received:"
+iex(1)> "0210ping2"
+iex(1)> "paynet server received:"
+iex(1)> "0200ping3"
+iex(1)> "cpay server received:"
+iex(1)> "0210ping3"
+iex(1)> "paynet server received:"
+iex(1)> "0200ping4"
+iex(1)> "cpay server received:"
+iex(1)> "0210ping4"
+iex(1)> "paynet server received:"
+iex(1)> "0200ping5"
+iex(1)> "cpay server received:"
+iex(1)> "0210ping5"
+iex(1)> "paynet server received:"
+iex(1)> "0200ping6"
+iex(1)> "cpay server received:"
+iex(1)> "0210ping6"
+iex(1)> "paynet server received:"
+iex(1)> "0200ping7"
+iex(1)> "cpay server received:"
+iex(1)> "0210ping7"
+iex(1)> "paynet server received:"
+iex(1)> "0200ping8"
+iex(1)> "cpay server received:"
+iex(1)> "0210ping8"
+iex(1)> "paynet server received:"
+iex(1)> "0200ping9"
+iex(1)> "cpay server received:"
+iex(1)> "0210ping9"
+iex(1)> "paynet server received:"
+iex(1)> "0200ping10"
+iex(1)> "cpay server received:"
+iex(1)> "0210ping10"
+iex(1)> "paynet server received:"
+iex(1)> "0200ping11"
+iex(1)> "cpay server received:"
+iex(1)> "0210ping11"
+iex(1)> "paynet server received:"
+iex(1)> "0200ping12"
+iex(1)> "cpay server received:"
+iex(1)> "0210ping12"
+iex(1)> "paynet server received:"
+iex(1)> "0200ping13"
+iex(1)> "cpay server received:"
+iex(1)> "0210ping13"
+iex(1)> "paynet server received:"
+iex(1)> "0200ping14"
+iex(1)> "cpay server received:"
+iex(1)> "0210ping14"
+iex(1)> "paynet server received:"
+iex(1)> "0200ping15"
+iex(1)> "cpay server received:"
+iex(1)> "0210ping15"
+iex(1)> "paynet server received:"
+iex(1)> "0200ping16"
+iex(1)> "cpay server received:"
+iex(1)> "0210ping16"
+iex(1)> "paynet server received:"
+iex(1)> "0200ping17"
+iex(1)> "cpay server received:"
+iex(1)> "0210ping17"
+iex(1)> "paynet server received:"
+iex(1)> "0200ping18"
+iex(1)> "cpay server received:"
+iex(1)> "0210ping18"
+iex(1)> "paynet server received:"
+iex(1)> "0200ping19"
+iex(1)> "cpay server received:"
+iex(1)> "0210ping19"
+iex(1)> "paynet server received:"
+iex(1)> "0200ping20"
+iex(1)> "cpay server received:"
+iex(1)> "0210ping20"
+iex(1)> "paynet server received:"
+iex(1)> "0200ping21"
+iex(1)> "cpay server received:"
+iex(1)> "0210ping21"
 ```
 

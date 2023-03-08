@@ -92,3 +92,14 @@ To make sure the TLS 1.2 is configured correctly for the PayNet simulator. Its b
 
 So I duplicate the existing Paynet Server simulator to listen to another port 17503.
 
+## Test Connecting using Socat to TLS STunnel which connecting to Paynet Simulator
+
+The configuration as diagram below:
+
+```mermaid
+flowchart LR
+    A[socat] --conn-->B[CPay_Sim]
+    A --conn--> C[STunnel] --conn--> D[Paynet_sim]
+    
+```
+
